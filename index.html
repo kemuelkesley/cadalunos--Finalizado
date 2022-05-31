@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cadastro de alunos senai</title>
+    <!--Google Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!--Bootstrap 4.1.3-->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="./assets/css/style.css">
+
+</head>
+<body>
+    
+    <div class="titulo">
+        <img class="logo" src="assets/img/senai.png" alt="">        
+        <img class="header" src="assets/img/qualifica-medium.png" alt="logo do sesi e senai">
+    </div>
+    <div id="popUp" class="popUpWrapper">        
+        <div class="popUp">
+            <p id="popUpMessage" style="text-align: justify;">Mensagem</p>
+            <div class="botao">
+                <button onclick="document.getElementById('popUp').style.display = 'none'" type="submit" class="btn btn-dark btn-lg">Entendi!</button>                
+            </div>
+        </div>        
+    </div>
+
+    <div class="container mb-5">
+        <div class="card">
+            <div class="card-body">
+                <form id="form_alunos" action="formulario_alunos.php" method="POST">     
+                    <div class="form-row"> 
+                        <div class="col">
+                            <label for="select-cidade" class="font">Cidade</label>
+                            <select onchange="selectArea(this.value)" id="select-cidade" name="select-cidade" class="form-control" required>                                
+                                <option value="">Selecione</option>                                
+                            </select>                            
+                        </div>
+                        <div class="col">
+                            <label for="select-area" class="font">Área</label>
+                            <select onchange="selectTurma(this.value, document.getElementById('select-cidade').value)" id="select-area" name="select-area" class="form-control" required>                                
+                                <option value="">Selecione</option>                                
+                            </select>                            
+                        </div>                                    
+                        <div class="col">
+                            <label for="select-turma" class="font">Curso</label>
+                            <select onchange="selectLocal(this.value)" id="select-turma" class="form-control" name="select-turma" required>                                
+                                <option value="">Selecione</option>                                
+                            </select>                            
+                        </div>                                    
+                        <div class="col">
+                            <label for="select_local" class="font">Local</label>
+                            <select onchange="selectStatusLocal()" id="select_local" class="form-control" name="select_local" required>                                
+                                <option value="">Selecione</option>                                
+                            </select>
+                            <input id="teste" style="display: none;">                            
+                        </div>                                    
+                    </div>                        
+                    <div data-menu="Informações Pessoais" class="line"><hr></div>                    
+                    <div class="form-row">
+                       <div class="col">                            
+                           <label for="cpf" class="font">CPF</label>
+                           <input type="text" minlength="11" maxlength="14" onkeydown="maskCPF(this.value, this.id)" onblur="cpfOrigem(this.value, this.id)" class="form-control" required name="cpf" id="cpf" placeholder="000.000.000-00">
+                           <span id="tooltip-cpf" class="tooltip-form tooltip-cpf">*Cpf inválido</span>
+                       </div>
+                        <div class="col">                            
+                            <label for="nome" class="font">Nome Completo</label>
+                            <input type="text" class="form-control" required id="nome" name="nome" placeholder="Nome Completo">
+                        </div>                        
+                    </div>    
+
+                    <br>
+
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="nascimento" class="font">Data de Nascimento</label>
+                            <input type="date" onchange="verificaIdade()" class="form-control" required id="nascimento" name="nascimento"  max="9999-12-31">
+                            <span id="tooltip-dtnasc" class="tooltip-dtnasc tooltip-form">*Menor de 14 anos</span>
+                        </div>    
+                        
+                        <div class="col">
+                            <label for="sexo" class="font">Sexo do Aluno</label>                            
+                            <select id="sexo" name="sexo" class="form-control" required>                                
+                                <option value="">Selecione</option>
+                                <option value="M">Masculino</option>
+                                <option value="F">Feminino</option>
+                            </select>
+                        </div>                         
+
+                        <div class="col">
+                            <label for="grau" class="font">Grau de Instrução</label>
+                            <select id="grau" name="grau" class="form-control" required>                                
+                                <option value="">Selecione</option> 
+                            </select>
+                        </div>      
+                         
+                        <div class="col">
+                            <label for="corraca" class="font">Cor/Raça</label>
+                            <select id="corraca" name="corraca" class="form-control" required>                                
+                                <option value="">Selecione</option>                                
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-row">                        
+                        <div class="col">
+                            <label for="estado_natal" class="font">Estado Natal</label>                            
+                            <select onchange="selectNaturalidade(this.value,null,this.id)" name="estado_natal" id="estado_natal" class="form-control" required>
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col">
+                            <label for="cidadeNascimento" class="font">Cidade de Nascimento</label>    
+                            <select class="form-control" required id="cidadeNascimento" name="cidadeNascimento">                                
+                                <option value="">Selecione</option>                                
+                            </select> 
+                        </div>
+
+                       
+                    </div> 
+                    <br>
+                    <div class="form-row">
+                        <div class="col-12">
+                            <label for="nome_mae" class="font">Nome Completo da Mãe</label>
+                            <input type="text" id="nome_mae" name="nome_mae" class="form-control" required placeholder="Nome da Mãe">      
+                        </div>
+                    </div>
+
+                    <div data-menu="Endereço do Aluno" class="line"><hr></div>                      
+
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="cep" class="font">CEP</label>
+                            <input type="text" class="form-control" required id="cep" name="cep" maxlength="8" onkeypress="$(this).mask('00.000-000')" placeholder="00000000" >
+                        </div>
+                        <div class="col">
+                            <label for="logradouro" class="font">Logradouro</label>
+                            <input type="text" class="form-control" required id="logradouro" name="logradouro" placeholder="Logradouro">
+                        </div>
+                    </div>   
+
+                    <br>
+
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="numero" class="font">Número</label>
+                            <input type="text" class="form-control" required id="numero" name="numero" placeholder="Número">
+                        </div>  
+
+                        <div class="col">
+                            <label for="bairro" class="font">Bairro</label>
+                            <input type="text" class="form-control" required  id="bairro" name="bairro" placeholder="Bairro">
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="estado" class="font">Estado</label>                            
+                            <select onchange="selectNaturalidade(this.value,null,this.id)" name="estado" id="estado" class="form-control" required>
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="col">
+                            <label for="cidade" class="font">Cidade</label>
+                            <select id="cidade" name="cidade" class="form-control" required>                                
+                                <option value="">Selecione</option>                                 
+                            </select>
+                        </div>
+                    </div>
+                   
+                    <div data-menu="Responsável Financeiro" class="line"><hr class="campos-responsavel"></div>
+
+                    <div class="form-row" class="campos-responsavel" >
+                        <div class="col">
+                            <label for="cpf_responsavel" class="font">CPF Responsável</label>
+                            <input type="text" minlength="11" maxlength="14" onkeydown="maskCPF(this.value, this.id)" onblur="testaCPF(this.id)" class="form-control" required name="cpf_resp" id="cpf_resp" placeholder="000.000.000-00">
+                            <span id="tooltip-cpf_resp" class="tooltip-form tooltip-cpf_resp">*Cpf inválido</span>
+                        </div>
+                        <div class="col">
+                            <label for="nome_responsavel" class="font">Nome Completo</label>
+                            <input type="text" id="nome_responsavel" name="nome_responsavel" class="form-control" required placeholder="Responsavel Financeiro">   
+                        </div>
+                    </div>   
+                    <br> 
+                    <div class="form-row" class="campos-responsavel" >
+                        <div class="col">
+                            <label for="data_nascimento_responsavel" class="font">Data de Nascimento</label>
+                            <input type="date" id="data_nascimento_responsavel" name="data_nascimento_responsavel" onchange="verificaIdadeResponsavel()" class="form-control" required> 
+                            <span id="tooltip-dtnasc" class="tooltip-dtnasc tooltip-form">*Responsavel menor de 14 anos</span> 
+                        </div>                        
+                        <div class="col">
+                            <label for="tel-responsavel" class="font">Telefone do responsável</label>
+                            <input type="tel" id="tel-responsavel" name="tel-responsavel" class="form-control" maxlength="15" onkeypress="$(this).mask('(00) 00000-0009')" required placeholder="(00) 00000-0000">   
+                        </div>
+                        <div class="col">
+                            <label for="email_responsavel" class="font">Email do responsável</label>
+                            <input type="email" id="email_responsavel" name="email_responsavel" class="form-control" required placeholder="exemplo@email.com.br" >                               
+                        </div>                        
+                    </div>
+
+                    <div data-menu="Dados bancários" class="line"><hr class="campos-responsavel"></div>
+
+                    <!-- Dados Bancarios -->
+
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="select_bancos" class="font">Banco</label>
+                            <select id="select_bancos" name="select_bancos" class="form-control" onchange="mostrarOperacaoCaixa()" required>                                
+                                <option value="">Selecione</option>                                 
+                            </select>
+                        </div>
+
+                        <div class="col">
+                            <label for="agencia" class="font">Agência</label>
+                            <input type="number" id="agencia" name="agencia" class="form-control" onkeypress="onlynumber();" required placeholder="Apenas números">                               
+                        </div>
+
+                        <div class="col">
+                            <label for="conta" class="font">Conta bancária</label>
+                            <input type="number" id="conta" name="conta" class="form-control" onkeypress="onlynumber()" placeholder="Apenas números" required>   
+                        </div>  
+                                               
+                        <div class="col">
+                            <label for="operacao" class="font">Operação</label>
+                            <input type="number" id="operacao" name="operacao" class="form-control" onkeypress="onlynumber()" placeholder="Apenas números" >   
+                        </div>    
+                    </div>
+
+                    <br>
+
+                    <div data-menu="Informações Gerais" class="line"><hr class="campos-responsavel"></div>
+
+                    <div class="form-row">
+                        <div class="col">
+                            <!-- <label for="cidade" class="font">Confirmação de Veracidade</label><br>                             -->
+                            <p class="font">Confirmação de Veracidade</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="form-row">
+                            <div class="col">
+                                <input type="radio" class="veracidade" onclick="veracidadeMarcada()" id="veracidade-1" name="radio-veracidade"  value="Confirmo ser aluno regularmente matriculado em 2022 na 2ª ou 3ª série do Ensino Médio, da Rede Estadual de Educação de Alagoas.">
+                                <label for="veracidade-1"> Confirmo ser aluno regularmente matriculado em 2022 na 2ª ou 3ª série do Ensino Médio, da Rede Estadual de Educação de Alagoas.</label>  
+                            </div>                        
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <input type="radio" class="veracidade" onclick="veracidadeMarcada()" id="veracidade-2" name="radio-veracidade" value="Confirmo ser aluno regularmente matriculado em 2022 na EJA do Ensino Médio, da Rede Estadual de Educação de Alagoas.">    
+                                <label for="veracidade-2">Confirmo ser aluno regularmente matriculado em 2022 na EJA do Ensino Médio, da Rede Estadual de Educação de Alagoas.</label>  
+                            </div>
+                        </div>                        
+                        <input type="text" class="form-control" required id="veracidade" name="veracidade">
+                    </div>
+                    <br>   
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="escola_estadual" class="font">Qual Escola Estadual você estuda?</label>
+                            <input type="text" class="form-control" required  id="escola_estadual" name="escola_estadual" placeholder="Nome da Escola">
+                        </div>
+                    </div>      
+                    <br>
+                    <div class="form-row">
+                        <div class="col">
+                            <p class="font">Autorização de Uso de Dados</p>                            
+                        </div>
+                    </div>                    
+                    <div class="form-row">
+                        <div class="col" >
+                            <input type="checkbox" id="radio-autoriza-dados" name="radio-autoriza-dados" required>
+                            <label for="radio-autoriza-dados">Autorizo o compartilhamento dos meus dados no Sistema de Gestão da Educação do Estado de Alagoas
+                                com o Senai para fins educacionais no Qualifica Educação.</label>   
+                        </div>
+                    </div>       
+
+
+                    <div data-menu="Informações para Contato" class="line"><hr></div>
+                    <br>
+
+                    <div class="row">
+                        <div class="col">
+                            <label for="cel" class="font">Telefone Celular</label>
+                            <input type="cel" class="form-control" id="cel" name="cel" maxlength="15" onkeypress="$(this).mask('(00) 00000-0009')"  required placeholder="(00) 00000-0000">
+                        </div>
+    
+                        <div class="col">
+                            <label for="email" class="font">E-mail</label>
+                            <input type="email" class="form-control" id="email" name="email" required placeholder="exemplo@exemplo.com.br">
+                        </div>
+                    </div>
+
+                    <br>                    
+                    <!--Campo Informações para Contato-->
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="cidade" class="font">Qual melhor horário para contato?</label><br>                            
+                        </div>
+                    </div>
+                   
+                    <div>
+                        <div class="form-row">
+                            <div>
+                                <input class="check-horario" onclick="horarioMarcado()" type="checkbox" id="check_turno_manha" name="check-turno" value="Manhã (8h - 12h)">    
+                                <label for="check-turno-manha">Manhã (8h - 12h)</label>                                                     
+                            </div>                        
+                        </div>
+                        <div class="form-row">
+                            <div>
+                                <input class="check-horario" onclick="horarioMarcado()" type="checkbox" id="check_turno_tarde" name="check-turno" value="Tarde (13h - 17h)">    
+                                <label for="check-turno-tarde">Tarde (13h - 17h)</label>                     
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div>
+                                <input class="check-horario" onclick="horarioMarcado()" type="checkbox" id="check_turno_noite" name="check-turno" value="Noite (18h - 21h)">    
+                                <label for="check-turno-noite">Noite (18h - 21h)</label>                     
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div>
+                                <input class="check-horario" onclick="horarioMarcado()" type="checkbox" id="check_turno_todos" name="check-turno" value="Qualquer horário">    
+                                <label for="check-turno-todos">Qualquer horário</label>                     
+                            </div>
+                        </div>
+                        <input type="text" class="form-control" required id="HorarioContato" name="HorarioContato">
+                    </div>
+
+                    <div class="alert alert-danger" hidden id="alerta" role="alert">
+                        <p>Escolha uma opção para Contato.</p>
+                    </div>
+
+                    <br>
+
+                    <div>
+                        <div class="form-row">
+                            <div class="col">
+                                <label for="cidade" class="font">Como você prefere ser contatado?</label><br>                            
+                            </div>                         
+                        </div> 
+                        <div class="form-row">
+                            <div class="col">
+                                <input type="radio" onclick="localMarcado()" class="local_contato" id="ligacao-telefonica" name="radio-contato" value="Ligação Telefônica">    
+                                <label for="ligacao-telefonica">Ligação Telefônica</label>                     
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <input type="radio" onclick="localMarcado()" class="local_contato" id="radio-zap" name="radio-contato" value="WhatsApp">    
+                                <label for="radio-zap">WhatsApp</label>                     
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <input type="radio" onclick="localMarcado()" class="local_contato" id="radio-contato" name="radio-contato" value="E-mail">    
+                                <label for="radio-contato">E-mail</label>                     
+                            </div>
+                        </div>                        
+                        <input type="text" class="form-control" required id="LocalContato" name="LocalContato">
+                    </div>
+
+                    <!--Modal-->
+                    <div id="popUp-Enviar" class="popUpWrapper">        
+                        <div class="popUp">
+                            <p id="popUp-EnviarMensagem" style="text-align: justify;">Mensagem</p>
+                            <div class="botao">
+                                <button onclick="$('#form_alunos').trigger('submit')" class="btn btn-dark btn-lg">Ok</button>                
+                            </div>
+                        </div>        
+                    </div>
+                    <div class="botao">
+                        <button id="submit-button" type="submit" method="post" onclick="checarHorario()" class="btn btn-primary btn-lg">Enviar</button>
+                        <!-- <button id="submit-button" type="submit" method="post" onclick="chamarModalEnviar()"  class="btn btn-primary btn-lg">Enviar</button> -->
+                    </div>
+                </form>
+
+                    <!--Botão que ao clicar em enviar abre outra pagina para apresentar o modal com as informações se o aluno foi PRE ou Matricucalo-->                    
+                    <!-- <div class="botao">    
+                        <a href="./pag-tela-modal.html" target="_blank" ><button id="submit-button" class="btn btn-primary btn-lg" >Enviar</button></a>                        
+                        <button id="submit-button" class="btn btn-primary btn-lg"><a href="./pag-tela-modal.html" target="_blank" ></a>Enviar</button>                        
+                    </div> -->
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="assets/js/formulario-aluno.js"></script>
+    <script src="assets/js/formulario.js"></script>
+    <script src="assets/js/jquery.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <!--Mascaras (tel, CEP e CPF)-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            document.getElementById('veracidade').style.display = 'none';
+            document.getElementById('HorarioContato').style.display = 'none';
+            document.getElementById('LocalContato').style.display = 'none';
+            selectCidades();
+            corRaca();        
+            // dsNascionalidade();        
+            estadoNatal();
+            grauDeInstrucao();
+            // paisOrigem();
+            estadoOrigem();  
+            buscaBancos();      
+            mostrarOperacaoCaixa();
+            
+        });
+    </script>
+    <script>
+    </script>
+
+</body>
+</html>
